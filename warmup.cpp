@@ -121,11 +121,33 @@ int main() {
     // =================================================================
 
     cout << "=== Q1 ===\n";
-
-
-
-
-
+    double total = 0;
+    int valid = 0;
+    double heavykg = morningWeights[0];
+    int heavypos = 0;
+    int lrun = 0;
+    int crun = 0;
+    for (int i = 0; i < 12; i++) {
+        double temp = morningWeights[i];
+        total += temp;
+        if (0 < temp && temp<=80){
+            valid++;
+            crun++;
+        } else {
+            if (lrun > crun){
+                lrun = crun;
+            }
+            crun = 0;
+        }
+        if (temp > heavykg){
+            heavykg = temp;
+            heavypos = i;
+        }
+    }
+    cout << "Total: " << total << " kg" << endl;
+    cout << "Valid: " << valid << " of 12" << endl;
+    cout << "Heaviest:" << heavykg <<  "kg at position " << heavypos << endl;
+    cout << "Longest valid run:" << lrun << endl;
     cout << "\n";
 
 
