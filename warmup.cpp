@@ -134,7 +134,7 @@ int main() {
             valid++;
             crun++;
         } else {
-            if (lrun > crun){
+            if (lrun < crun){
                 lrun = crun;
             }
             crun = 0;
@@ -146,8 +146,8 @@ int main() {
     }
     cout << "Total: " << total << " kg" << endl;
     cout << "Valid: " << valid << " of 12" << endl;
-    cout << "Heaviest:" << heavykg <<  "kg at position " << heavypos << endl;
-    cout << "Longest valid run:" << lrun << endl;
+    cout << "Heaviest: " << heavykg << " kg at position " << heavypos << endl;
+    cout << "Longest valid run: " << lrun << endl;
     cout << "\n";
 
 
@@ -157,16 +157,42 @@ int main() {
     // =================================================================
 
     cout << "=== Q2 ===\n";
+    int gradeCount[3] = {0}; // Initialize with 3 elements, all 0
+    double totalWeight[3] = {0.0}; // Initialize with 3 elements, all 0.0
+    double averageWeight[4] = {0.0}; // Initialize with 3 elements, all 0.0
+    char BestGrade;
+    for (const Delivery& d : logbook) {
+        if (d.grade == 'A') {
+            gradeCount[0]++;
+            totalWeight[0] += d.kg;
+        } else if (d.grade == 'B') {
+            gradeCount[1]++;
+            totalWeight[1] += d.kg;
+        } else if (d.grade == 'C') {
+            gradeCount[2]++;
+            totalWeight[2] += d.kg;
+        }
+    }
+    const char Grade[] = {'A','B','C'};
+    for (int i = 0; i < 3; i++) {
+        if (gradeCount[i] > 0) {
+            averageWeight[i] = totalWeight[i] / gradeCount[i];
+        }
+        if (averageWeight[3] < averageWeight[i]) {
+            averageWeight[3] = averageWeight[i];
+            BestGrade = Grade[i];
+        }
+    }
 
-
-
-
-
+    cout << "Grade A: " << gradeCount[0] << " deliveries, " << totalWeight[0] << " kg total, " << averageWeight[0] << " kg average" << endl;
+    cout << "Grade B: " << gradeCount[1] << " deliveries, " << totalWeight[1] << " kg total, " << averageWeight[1] << " kg average" << endl;
+    cout << "Grade C: " << gradeCount[2] << " deliveries, " << totalWeight[2] << " kg total, " << averageWeight[2] << " kg average" << endl;
+    cout << "Best average: grade " << BestGrade << endl;
     cout << "\n";
 
 
     // =================================================================
-    //  Q3  ·  WHO IS WHO                    (see README)
+    //  Q3  ·  WHO IS WHO                     (see README)
     //  Uses: logbook, and the findFarmer function you write below main
     // =================================================================
 
