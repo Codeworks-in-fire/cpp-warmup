@@ -84,6 +84,7 @@ void printBoard(const vector<int> &b) {
     cout << "\n";
 }
 
+int findFarmer(const vector<Delivery> &log, string name);
 
 int main() {
 
@@ -197,8 +198,21 @@ int main() {
     // =================================================================
 
     cout << "=== Q3 ===\n";
+    string most = "";
+    int mostno = 0;
+    vector<Delivery> kilogram = {
 
-
+    };
+    Delivery highest = {"",0,''};
+    for (const Delivery& d : logbook) {
+        if (findFarmer(kilogram,d.farmer) == -1){
+            kilogram.push_back(d);
+        }else {
+            kilogram[].
+        }
+    }
+    cout << "findFarmer(Isanda) = " << findFarmer(logbook,"Isanda") << endl;
+    cout << "findFarmer(Mukamana) = " << findFarmer(logbook,"Mukamana") << endl;
 
 
 
@@ -284,9 +298,15 @@ int main() {
 // Q3:  return the position of the first delivery by this farmer,
 //      or -1 if the farmer is not in the log at all.
 //
-// int findFarmer(const vector<Delivery> &log, string name) {
-//
-// }
+int findFarmer(const vector<Delivery> &log, string name) {
+    for (const Delivery& d : log) {
+        if (d.farmer == name) {
+            return &d - &log[0]; // Return the index of the delivery
+        }
+    }
+    return -1; // Farmer not found
+
+}
 
 
 // Q4:  what one delivery earns, before any cap is applied.
