@@ -26,7 +26,11 @@ struct Delivery {
     double kg;
     char   grade;
 };
-
+struct Count {
+    Delivery del;
+    int c;
+    };
+double payment(double kg, char grade);
 
 /**
  * THE DATA
@@ -85,6 +89,7 @@ void printBoard(const vector<int> &b) {
 }
 
 int findFarmer(const vector<Delivery> &log, string name);
+int findFarmer2(const vector<struct Count> &log, string name);
 
 int main() {
 
@@ -198,23 +203,30 @@ int main() {
     // =================================================================
 
     cout << "=== Q3 ===\n";
-    string most = "";
-    int mostno = 0;
-    vector<Delivery> kilogram = {
-
-    };
-    Delivery highest = {"",0,''};
+    vector<Count> kilogram = {};
     for (const Delivery& d : logbook) {
-        if (findFarmer(kilogram,d.farmer) == -1){
-            kilogram.push_back(d);
+        int temp = findFarmer2(kilogram,d.farmer);
+        if (temp == -1){
+            kilogram.push_back({d,1});
         }else {
-            kilogram[].
+            kilogram[temp].del.kg += d.kg;
+            kilogram[temp].c ++;
+        }
+    }
+    Delivery highest = kilogram[0].del;
+    Count most = kilogram[0];
+    for (const Count& d : kilogram) {
+        if (highest.kg < d.del.kg){
+            highest = d.del;
+        }
+        if (most.c < d.c){
+            most = d;
         }
     }
     cout << "findFarmer(Isanda) = " << findFarmer(logbook,"Isanda") << endl;
     cout << "findFarmer(Mukamana) = " << findFarmer(logbook,"Mukamana") << endl;
-
-
+    cout << "Most deliveries: " << most.del.farmer << " (" << most.c << ")" << endl;
+    cout << "Most kg: " << highest.farmer << " (" << highest.kg << " kg)" << endl;
 
     cout << "\n";
 
@@ -225,11 +237,18 @@ int main() {
     // =================================================================
 
     cout << "=== Q4 ===\n";
-
-
-
-
-
+    double dailytotal = 0.0;
+    for (const Delivery& d : logbook) {
+        double temp = payment(d.kg,d.grade);
+        if (dailytotal <= 100000) {
+            cout << d.farmer << " " << d.kg << " kg grade " << d.grade << " -> " << temp << endl;
+        } else{
+            temp = temp/2;
+            cout << d.farmer << " " << d.kg << " kg grade " << d.grade << " -> " << temp << "   (halved)" << endl;
+        }
+        dailytotal += temp;
+    }
+    cout << "Total paid: " << dailytotal;
     cout << "\n";
 
 
@@ -307,12 +326,27 @@ int findFarmer(const vector<Delivery> &log, string name) {
     return -1; // Farmer not found
 
 }
+int findFarmer2(const vector<struct Count> &log, string name) {
+    for (const Count& d : log) {
+        if (d.del.farmer == name) {
+            return &d - &log[0]; // Return the index of the delivery
+        }
+    }
+    return -1; // Farmer not found
+
+}
 
 
 // Q4:  what one delivery earns, before any cap is applied.
 //      Grade A pays 10% above the rate, B pays the rate,
 //      anything else pays 20% below it. The rate is 450.
 //
-// double payment(double kg, char grade) {
-//
-// }
+double payment(double kg, char grade) {
+    if (grade == 'A') {
+        return kg*450*1.1;
+    }else if (grade =='B') {
+        return kg*450;
+    }else {
+        return kg*450*0.8;
+    }
+}
