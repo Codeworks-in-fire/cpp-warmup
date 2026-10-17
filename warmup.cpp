@@ -292,7 +292,23 @@ int main() {
     // =================================================================
 
     cout << "=== Q6 ===\n";
-
+    bool con = true;
+    int play = 6 , laps = 0 , current = play;
+    while (con) {
+        laps ++;
+        for (int i = 0; i < board[play];i++){
+            current = (current % 16) + 1;
+            board[current] ++;
+        }
+        if (board[current] == 1) {
+            con = false;
+        }
+        board[play] = 0;
+        play = current;
+    }
+    cout << "Final board: ";
+    printBoard(board);
+    cout << "Landed in pit " << play << " after " << laps << " laps" << endl;
 
 
     
