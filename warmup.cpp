@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 using namespace std;
 
 /**
@@ -30,7 +31,10 @@ struct Count {
     Delivery del;
     int c;
     };
+vector<char> letters = {'a','b','c','A','B','C'};
 double payment(double kg, char grade);
+bool verid(string id);
+string verkg(string kg);
 
 /**
  * THE DATA
@@ -258,10 +262,27 @@ int main() {
     // =================================================================
 
     cout << "=== Q5 ===\n";
-
-
-
-
+    int accepted = 0;
+    int rejected = 0;
+    for (const RawRecord& d : rawRecords) {
+        if (verid(d.id) == false){
+            rejected ++;
+            cout << d.id << " REJECT- bad id" << endl;
+        } else if (d.kg.empty()){
+            rejected ++;
+            cout << d.id << " REJECT - weight missing" << endl;
+        } else if (verkg(d.kg) != ""){
+            rejected ++;
+            cout << d.id <<  verkg(d.kg) << endl;
+        } else if (find(letters.begin(),letters.end(), d.grade) == letters.end()){
+            rejected ++;
+            cout << d.id << " REJECT - unknown grade" <<endl;
+        } else {
+            accepted ++;
+            cout << d.id << " ACCEPT" << endl;
+        }
+    }
+    cout << accepted << " accepted, " << rejected << " rejected" << endl;
 
     cout << "\n";
 
@@ -348,5 +369,41 @@ double payment(double kg, char grade) {
         return kg*450;
     }else {
         return kg*450*0.8;
+    }
+}
+
+bool verid(string id) {
+    if (id.length() != 4) {
+        return false;
+    }
+    if (id[0] !='F') {
+        return false;
+    }
+    for (int i = 1; i < 4 ; i++) {
+        for (int j = 0 ; j < 10 ;  j++) {
+            if (id[i] == j + '0'){
+                break;
+            } 
+            if (j == 9) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+string verkg(string kg) {
+    try {
+        double l = stod(kg);
+        if (l <= 0.0 || l > 80.0){
+            return " REJECT - weight out of range";
+        }
+        return "";
+    }
+    catch(const invalid_argument&){
+        return " REJECT - weight not a number";
+    }
+    catch(const out_of_range&){
+        return  " REJECT - weight out of range";
     }
 }
